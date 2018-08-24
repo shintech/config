@@ -1,0 +1,20 @@
+server {
+  listen 9443 ssl;
+  listen [::]:9443 ssl;
+  ssl on;
+  ssl_certificate /etc/letsencrypt/live/skynet.shintech.ninja/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/skynet.shintech.ninja/privkey.pem;
+
+  error_page  497 https://$host:9443$request_uri;
+# server_name skynet;
+    location / {
+      proxy_pass http://localhost:8082;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
+    }
+}
+
+
